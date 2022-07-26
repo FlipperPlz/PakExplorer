@@ -15,8 +15,5 @@ namespace PakExplorer.Tree;
 public interface IFileItem : ITreeItem {
     public string Extension { get; }
     public string FullPath { get; }
-
-    public Stream GetEntryData();
-    public string GetText();
-
+    public byte[] EntryData { get; set; }
 }

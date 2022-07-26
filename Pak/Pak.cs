@@ -20,6 +20,7 @@ public class Pak {
             ReadHead();
             ReadData();
             ReadEntries();
+            ReadEntryData();
             _reader = null;
         }
     }
@@ -82,28 +83,23 @@ public class Pak {
         }
     }
 
-
-    public Stream GetEntryData(PakEntry entry) {
-        using (_reader = new BinaryReader(File.OpenRead(FileName))) {
+    private void ReadEntryData() {
+        foreach (var entry in PakEntries) {
             if (entry.CompressionType == PakCompressionType.Zlib) {
                 try {
                     _reader.BaseStream.Position = entry.BinaryOffset;
-                    var ret =  _reader.ReadCompressedData(entry.OriginalSize);
-                    _reader.Close();
-                    return ret;
+                    entry.EntryData = _reader.ReadCompressedData(entry.OriginalSize);
+                    continue;
                 } catch {
                     _reader.BaseStream.Position = entry.BinaryOffset;
-                    var ret = _reader.ReadDataStream(entry.Size);
-                    _reader.Close();
-                    return ret;
+                    entry.EntryData = _reader.ReadBytes(entry.Size);
+                    continue;
                 }
             } else {
                 _reader.BaseStream.Position = entry.BinaryOffset;
-                var ret = _reader.ReadDataStream(entry.Size);
-                _reader.Close();
-                return ret;
+                entry.EntryData = _reader.ReadBytes(entry.Size);
+                continue;
             }
-            _reader = null;
         }
     }
 }

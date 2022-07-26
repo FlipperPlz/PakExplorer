@@ -20,19 +20,15 @@ public class EntryTreeItem : IFileItem {
     
     public string Extension { get; }
     public string FullPath { get; }
-    
+    public byte[] EntryData { get; set; }
+
 
     public EntryTreeItem(Pak.Pak pak, PakEntry entry) {
         _pak = pak;
         _pakEntry = entry;
         FullPath = entry.Name.Replace("\\", "\0").Replace('/', '\0').Replace('\0', Path.DirectorySeparatorChar);
         Extension = Path.GetExtension(FullPath);
+        EntryData = entry.EntryData;
         Name = Path.GetFileName(FullPath);
-    }
-    
-    public Stream GetEntryData() => _pak.GetEntryData(_pakEntry);
-    public string GetText() {
-        using var reader = new StreamReader(GetEntryData());
-        return reader.ReadToEnd();
     }
 }

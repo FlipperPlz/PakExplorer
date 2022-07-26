@@ -27,7 +27,7 @@ public static class Extensions {
         return BitConverter.ToInt32(data, 0);
     }
     
-    public static Stream ReadCompressedData(this BinaryReader pr, int expectedSize) {
+    public static byte[] ReadCompressedData(this BinaryReader pr, int expectedSize) {
         var mem = new MemoryStream();
         pr.Skip(2);
         var deflateStream = new DeflateStream(pr.BaseStream, CompressionMode.Decompress);
@@ -40,9 +40,6 @@ public static class Extensions {
             bytesRead += toRead;
         }
 
-        return mem;
+        return mem.ToArray();
     }
-
-    public static Stream ReadDataStream(this BinaryReader pr, int length) => new MemoryStream(pr.ReadBytes(length));
-
 }

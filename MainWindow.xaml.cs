@@ -73,7 +73,7 @@ namespace PakExplorer {
         }
 
         private void Show(IFileItem entry) {
-            TextPreview.Text = entry.GetText();
+            TextPreview.Text = Encoding.UTF8.GetString(entry.EntryData);
             TextPreview.Visibility = Visibility.Visible;
         }
     }

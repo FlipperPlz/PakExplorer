@@ -16,6 +16,7 @@ public sealed class PakEntry {
     internal int Size { get; private set; }
     internal int OriginalSize { get; private set; }
     internal string Name { get; private set; }
+    internal byte[] EntryData { get; set; }
     internal readonly PakCompressionType CompressionType;
     private byte[] UnknownData { get; set; }
 
