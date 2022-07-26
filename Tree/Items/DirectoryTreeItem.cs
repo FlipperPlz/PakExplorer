@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using PakExplorer.Pak;
+using PakExplorer.Tree.Files;
 
 namespace PakExplorer.Tree.Items; 
 
@@ -17,7 +18,7 @@ public class DirectoryTreeItem : IParentTreeItem {
     public string? Name { get; set; }
     private List<ITreeItem>? merged;
     public readonly List<DirectoryTreeItem> Directories = new();
-    public readonly List<EntryTreeItem> Files = new();
+    public readonly List<FileBase> Files = new();
 
     public ICollection<ITreeItem> Children {
         get
@@ -39,12 +40,12 @@ public class DirectoryTreeItem : IParentTreeItem {
         return existing;
     }
     
-    internal IEnumerable<EntryTreeItem> AllFiles => Directories.SelectMany(static d => d.AllFiles).Concat(Files);
+    internal IEnumerable<FileBase> AllFiles => Directories.SelectMany(static d => d.AllFiles).Concat(Files);
 
     public DirectoryTreeItem(string? name) => Name = name;
     
     internal void AddEntry(Pak.Pak pak, PakEntry entry) {
-        Files.Add(new EntryTreeItem(pak, entry));
+        Files.Add(new GenericTreeFile(pak, entry));
         merged = null;
     }
 

@@ -26,7 +26,7 @@ namespace PakExplorer {
         private readonly ObservableCollection<ITreeItem> PakList = new();
         
         private PakTreeItem? CurrentPak { get; set; }
-        private EntryTreeItem? SelectedEntry { get; set; } 
+        private FileBase? SelectedEntry { get; set; } 
         
         public MainWindow() {
             InitializeComponent();
@@ -54,7 +54,7 @@ namespace PakExplorer {
             ResetView();
             Cursor = Cursors.Wait;
             switch (e.NewValue) {
-                case EntryTreeItem entry:
+                case FileBase entry:
                     SelectedEntry = entry;
                     Show(entry);
                     break;
@@ -72,7 +72,7 @@ namespace PakExplorer {
             CurrentPak = null;
         }
 
-        private void Show(IFileItem entry) {
+        private void Show(FileBase entry) {
             TextPreview.Text = Encoding.UTF8.GetString(entry.EntryData);
             TextPreview.Visibility = Visibility.Visible;
         }

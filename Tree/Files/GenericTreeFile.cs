@@ -6,14 +6,10 @@
 //  * permission of Ryann
 //  *******************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.IO;
+using PakExplorer.Pak;
 
-namespace PakExplorer.Tree; 
+namespace PakExplorer.Tree.Files; 
 
-public interface IFileItem : ITreeItem {
-    public string Extension { get; }
-    public string FullPath { get; }
-    public byte[] EntryData { get; set; }
+public class GenericTreeFile : FileBase{
+    public GenericTreeFile(Pak.Pak pak, PakEntry entry) : base(pak, entry) { }
 }
