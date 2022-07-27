@@ -71,8 +71,16 @@ public class EnforceFunction {
         if (FunctionAnnotation is not null) ctxBuilder.Append(FunctionAnnotation).Append('\n');
         ctxBuilder.Append(string.Join(' ', FunctionModifiers)).Append(' ').Append(FunctionType).Append(' ');
         if (IsDeconstructor) ctxBuilder.Append('~');
-        ctxBuilder.Append(FunctionName).Append('(').Append(string.Join(", ", FunctionParameters)).Append(") ")
+        ctxBuilder.Append(FunctionName).Append('(');
+        
+        var paramList = new List<string>();
+        foreach (var parameter in FunctionParameters) {
+            paramList.Add(parameter.ToString());
+        }
+        ctxBuilder.Append(string.Join(", ", paramList)).Append(") ")
             .Append(FunctionBody);
+
+        if (FunctionBody == string.Empty) ctxBuilder.Append(';');
         return ctxBuilder.ToString();
     }
 }

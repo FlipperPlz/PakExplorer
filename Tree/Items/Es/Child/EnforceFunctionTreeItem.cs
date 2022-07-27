@@ -42,7 +42,7 @@ public class EnforceFunctionTreeItem : ITreeItem {
             ? (func.IsDeconstructor 
                 ? "{deconstructor} " 
                 : "{constructor} ")
-            : "{func}");
+            : "{func} ");
         
         nameBuilder.Append(func.FunctionName).Append('(');
         

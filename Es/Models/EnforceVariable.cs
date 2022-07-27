@@ -19,7 +19,6 @@ public class EnforceVariable {
     public string? VariableAnnotation { get; set; }
     public List<string> VariableModifiers { get; set; } = new();
     public string VariableType { get; set; }
-    
     public Dictionary<string, string?> Variables { get; set; } = new();
 
     public EnforceVariable(EnforceParser.FieldDeclarationContext ctx) {
@@ -57,15 +56,13 @@ public class EnforceVariable {
                 Variables.Add(identifier, value);
             }
         }
-        
-        
     }
     
     public EnforceVariable(EnforceParser.FormalParameterContext ctx) {
         var variableName = string.Empty;
 
         if (ctx.formalParameterDefined() is { } formalParameter) {
-            var variableValue = string.Empty;
+            string? variableValue = null;
             
             if (formalParameter.parameterModifier() is { } dParameterModifiers) {
                 foreach (var modifier in dParameterModifiers) {
@@ -174,11 +171,11 @@ public class EnforceVariable {
         var variableBuilder = new List<string>();
         foreach (var (k, v) in Variables) {
             var def = k;
-            if (v is not null) def += " = " + v;
+            if (v != string.Empty) def += " = " + v;
             variableBuilder.Add(def);
         }
 
-        ctxBuilder.Append(string.Join(", ", variableBuilder));
+        ctxBuilder.Append(string.Join(", ", variableBuilder).Trim());
         return ctxBuilder.ToString();
     }
 }

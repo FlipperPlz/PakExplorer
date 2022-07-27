@@ -55,7 +55,12 @@ namespace PakExplorer {
         public void LoadPAK(string path) {
             var pak = new PakTreeItem(new Pak.Pak(path));
             PakList.Add(pak);
-            if(ParseScripts) ScriptList.Add(new ScriptPakTreeItem(pak));
+            if (!ParseScripts) return;
+            if (MessageBox.Show("It looks like you have Parse Scripts enabled, this can impact pak load time and in extreme cases cause freezing." +
+                                " Do you want to disable script parsing for this pak?", "Disable Parsing?", MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning) == MessageBoxResult.No) {
+                ScriptList.Add(new ScriptPakTreeItem(pak));
+            }
         }
 
         private void ShowPakEntry(object sender, RoutedPropertyChangedEventArgs<object> e) {
