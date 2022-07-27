@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace PakExplorer.Tree; 
 
-public class IParentTreeItem : ITreeItem {
-    public string Name { get; }
+public interface IParentTreeItem : ITreeItem {
+    public string Name { get; set; }
     public ICollection<ITreeItem> Children { get; }
 }

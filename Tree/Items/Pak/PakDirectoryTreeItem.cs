@@ -7,18 +7,21 @@
 //  *******************************************************/
 
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using PakExplorer.Pak;
 using PakExplorer.Tree.Files;
+using PakExplorer.Tree.Items.Es;
 
 namespace PakExplorer.Tree.Items; 
 
-public class DirectoryTreeItem : IParentTreeItem {
+public class PakDirectoryTreeItem : IParentTreeItem {
     public string? Name { get; set; }
     private List<ITreeItem>? merged;
-    public readonly List<DirectoryTreeItem> Directories = new();
+    public readonly List<PakDirectoryTreeItem> Directories = new();
     public readonly List<FileBase> Files = new();
+
 
     public ICollection<ITreeItem> Children {
         get
@@ -31,10 +34,10 @@ public class DirectoryTreeItem : IParentTreeItem {
         }
     }
 
-    public DirectoryTreeItem CreateOrGetDirectory(string childName) {
+    public PakDirectoryTreeItem CreateOrGetDirectory(string childName) {
         var existing = Directories.FirstOrDefault(d => string.Equals(d.Name, childName));
         if (existing != null) return existing;
-        existing = new DirectoryTreeItem(childName);
+        existing = new PakDirectoryTreeItem(childName);
         Directories.Add(existing);
         merged = null;
         return existing;
@@ -42,12 +45,16 @@ public class DirectoryTreeItem : IParentTreeItem {
     
     internal IEnumerable<FileBase> AllFiles => Directories.SelectMany(static d => d.AllFiles).Concat(Files);
 
-    public DirectoryTreeItem(string? name) => Name = name;
+    public PakDirectoryTreeItem(string? name) => Name = name;
     
     internal void AddEntry(Pak.Pak pak, PakEntry entry) {
-        Files.Add(new GenericTreeFile(pak, entry));
+        switch (Path.GetExtension(entry.Name)) {
+            default:
+                Files.Add(new GenericTreeFile(pak, entry));
+                break;
+            
+        }
         merged = null;
     }
-
-
+    
 }

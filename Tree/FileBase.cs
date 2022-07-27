@@ -14,17 +14,17 @@ using PakExplorer.Pak;
 namespace PakExplorer.Tree; 
 
 public abstract class FileBase : ITreeItem {
-    private readonly Pak.Pak _pak;
-    private readonly Pak.PakEntry _pakEntry;
+    public readonly Pak.Pak Pak;
+    public readonly Pak.PakEntry PakEntry;
     
     public string Extension { get; }
     public string FullPath { get; }
     public byte[] EntryData { get; set; }
-    public string Name { get; }
-    
+    public string Name { get; set; }
+
     public FileBase(Pak.Pak pak, PakEntry entry) {
-        _pak = pak;
-        _pakEntry = entry;
+        Pak = pak;
+        PakEntry = entry;
         FullPath = entry.Name.Replace("\\", "\0").Replace('/', '\0').Replace('\0', Path.DirectorySeparatorChar);
         Extension = Path.GetExtension(FullPath);
         EntryData = entry.EntryData;

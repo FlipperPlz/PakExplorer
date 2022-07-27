@@ -24,19 +24,41 @@
             </MenuItem>
             <MenuItem Header="_Extract">
             </MenuItem>
+            <MenuItem Header="_Options">
+                <MenuItem
+                    Header="_Parse Scripts"
+                    IsCheckable="True"
+                    Checked="EnableScriptParsing_Click"
+                    Unchecked="DisableScriptParsing_Click"
+
+                    ></MenuItem>
+            </MenuItem>
         </Menu>
-        <Grid>
+        <Grid Name="WorkspaceGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="2*" />
+
             </Grid.ColumnDefinitions>
 
             <TabControl  Grid.Column="0">
                 <TabItem Header="Pak Files">
-                    <TreeView Name="PakView" ItemTemplate="{StaticResource TreeTemplate}" SelectedItemChanged="ShowPakEntry" VirtualizingStackPanel.IsVirtualizing="True">
-
-                    </TreeView>
-
+                    <TreeView 
+                        Name="PakView"
+                        ItemTemplate="{StaticResource TreeTemplate}"
+                        SelectedItemChanged="ShowPakEntry"
+                        VirtualizingStackPanel.IsVirtualizing="True"></TreeView>
+                </TabItem>
+                <TabItem
+                    Name="ScriptsTab"
+                    Header="Pak Scripts"
+                    Visibility="Hidden">
+                    <TreeView
+                        Name="ScriptView"
+                        ItemTemplate="{StaticResource TreeTemplate}"
+                        SelectedItemChanged="ShowPakScript"
+                        VirtualizingStackPanel.IsVirtualizing="True"></TreeView>
+                    
                 </TabItem>
 
             </TabControl>
@@ -46,17 +68,14 @@
               VerticalAlignment="Stretch"
               Width="5"/>
 
-            <Grid Grid.Column="2" Margin="5 0 0 0">
-                
-                
+            <Grid Grid.Column="1" Margin="5 0 0 0">
                 <GridSplitter Grid.Row="1" 
-                      HorizontalAlignment="Stretch" 
-                      VerticalAlignment="Top"
-                      ResizeDirection="Rows"
-                      Height="5"/>
+                              HorizontalAlignment="Stretch" 
+                              VerticalAlignment="Top"
+                              ResizeDirection="Rows"
+                              Height="5"/>
                 <Grid Background="LightGray" Grid.Row="1" Margin="0 5 0 0">
-                    <ScrollViewer Name="AboutBox" Margin="10">
-                    </ScrollViewer>
+                    <ScrollViewer Margin="10"></ScrollViewer>
                     <TextBox Name="TextPreview" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Visibility="Hidden" FontFamily="Consolas" IsReadOnly="True" IsReadOnlyCaretVisible="True" />
                 </Grid>
 

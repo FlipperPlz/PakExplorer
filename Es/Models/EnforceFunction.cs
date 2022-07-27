@@ -48,9 +48,15 @@ public class EnforceFunction {
             FunctionName = ctx.Start.InputStream.GetText(new Interval(identifier.Start.StartIndex, identifier.Stop.StopIndex));
         }
 
-        if (ctx.formalParameters().formalParameterList().formalParameter() is { } formalParameters) {
-            foreach (var parameter in formalParameters) FunctionParameters.Add(new EnforceVariable(parameter));
+        if (ctx.formalParameters() is not null) {
+            if(ctx.formalParameters().formalParameterList() is not null) {
+                if (ctx.formalParameters().formalParameterList().formalParameter() is { } formalParameters) {
+                    foreach (var parameter in formalParameters) FunctionParameters.Add(new EnforceVariable(parameter));
+                }
+            }
+            
         }
+        
 
         if (ctx.methodBody() is { } methodBody) {
             FunctionBody = ctx.Start.InputStream.GetText(new Interval(methodBody.Start.StartIndex, methodBody.Stop.StopIndex));

@@ -16,14 +16,20 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using PakExplorer.Pak;
 using PakExplorer.Tree;
+using PakExplorer.Tree.Files;
 using PakExplorer.Tree.Items;
+using PakExplorer.Tree.Items.Es;
 
 namespace PakExplorer {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+
+        private bool ParseScripts = false;
+        
         private readonly ObservableCollection<ITreeItem> PakList = new();
+        private readonly ObservableCollection<ITreeItem> ScriptList = new();
         
         private PakTreeItem? CurrentPak { get; set; }
         private FileBase? SelectedEntry { get; set; } 
@@ -41,13 +47,13 @@ namespace PakExplorer {
             dlg.Multiselect = true;
             if (dlg.ShowDialog() == true) {
                 LoadPAK(dlg.FileName);
-                
             }
         }
 
         public void LoadPAK(string path) {
             var pak = new PakTreeItem(new Pak.Pak(path));
             PakList.Add(pak);
+            if(ParseScripts) ScriptList.Add(new ScriptPakTreeItem(pak));
         }
 
         private void ShowPakEntry(object sender, RoutedPropertyChangedEventArgs<object> e) {
@@ -58,14 +64,13 @@ namespace PakExplorer {
                     SelectedEntry = entry;
                     Show(entry);
                     break;
-                case DirectoryTreeItem directory:
+                case PakDirectoryTreeItem directory:
                     break;
             }
             Cursor = Cursors.Arrow;
         }
-        
+
         private void ResetView() {
-            AboutBox.Visibility = Visibility.Hidden;
             TextPreview.Visibility = Visibility.Hidden;
             TextPreview.Text = string.Empty;
             SelectedEntry = null;
@@ -73,8 +78,26 @@ namespace PakExplorer {
         }
 
         private void Show(FileBase entry) {
+            ResetView();
             TextPreview.Text = Encoding.UTF8.GetString(entry.EntryData);
             TextPreview.Visibility = Visibility.Visible;
+        }
+
+        private void ShowPakScript(object sender, RoutedPropertyChangedEventArgs<object> e) {
+        }
+        
+        private void EnableScriptParsing_Click(object sender, RoutedEventArgs e) {
+            ParseScripts = true;
+            ScriptsTab.Visibility = Visibility.Visible;
+            ScriptView.ItemsSource = ScriptList;
+            foreach (var pak in PakList) ScriptList.Add(new ScriptPakTreeItem((PakTreeItem) pak));
+        }
+
+        private void DisableScriptParsing_Click(object sender, RoutedEventArgs e) {
+            ParseScripts = false;
+            ScriptView.ItemsSource = null;
+            ScriptsTab.Visibility = Visibility.Hidden;
+            ScriptList.Clear();
         }
     }
 }

@@ -11,5 +11,5 @@ using System.Collections.Generic;
 namespace PakExplorer.Tree; 
 
 public interface ITreeItem {
-    public string Name { get; }
+    public string Name { get; set; }
 }
