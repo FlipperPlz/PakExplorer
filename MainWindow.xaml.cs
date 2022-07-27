@@ -14,11 +14,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using PakExplorer.Es.Models;
 using PakExplorer.Pak;
 using PakExplorer.Tree;
 using PakExplorer.Tree.Files;
 using PakExplorer.Tree.Items;
 using PakExplorer.Tree.Items.Es;
+using PakExplorer.Tree.Items.Es.Child;
 
 namespace PakExplorer {
     /// <summary>
@@ -84,6 +86,28 @@ namespace PakExplorer {
         }
 
         private void ShowPakScript(object sender, RoutedPropertyChangedEventArgs<object> e) {
+            switch (e.NewValue) {
+                case EnforceScriptTreeItem esItem:
+                    ResetView();
+                    TextPreview.Text = esItem.Scope.ToString();
+                    TextPreview.Visibility = Visibility.Visible;
+                    break;
+                case EnforceClassTreeItem esClassItem:
+                    ResetView();
+                    TextPreview.Text = esClassItem.EsClazz.ToString();
+                    TextPreview.Visibility = Visibility.Visible;
+                    break;
+                case EnforceFunctionTreeItem esFunctionItem:
+                    ResetView();
+                    TextPreview.Text = esFunctionItem.EsFunction.ToString();
+                    TextPreview.Visibility = Visibility.Visible;
+                    break;
+                case EnforceVariableTreeItem esVariableItem:
+                    ResetView();
+                    TextPreview.Text = esVariableItem.EsVariable.ToString() + ';';
+                    TextPreview.Visibility = Visibility.Visible;
+                    break;
+            }
         }
         
         private void EnableScriptParsing_Click(object sender, RoutedEventArgs e) {

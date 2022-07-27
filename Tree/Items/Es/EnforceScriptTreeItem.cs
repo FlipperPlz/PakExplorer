@@ -57,4 +57,5 @@ public class EnforceScriptTreeItem : IParentTreeItem {
         VariableTreeItems = Scope.Variables.Select(static var => new EnforceVariableTreeItem(var)).ToList();
     }
 
+    public override string ToString() => Scope.ToString();
 }

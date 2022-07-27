@@ -7,6 +7,7 @@
 //  *******************************************************/
 
 using System.Collections.Generic;
+using System.Text;
 using Antlr4.Runtime.Misc;
 using PakExplorer.Es.Antlr;
 
@@ -63,5 +64,28 @@ public class EnforceEnum {
                 EnumValues.Add(name, value);
             }
         }
+    }
+
+    public override string ToString() {
+        var ctxBuilder = new StringBuilder();
+        if (EnumAnnotation is not null) ctxBuilder.Append(EnumAnnotation).Append('\n');
+        if (ModdedEnum) ctxBuilder.Append("modded ");
+        if (SealedEnum) ctxBuilder.Append("sealed ");
+        ctxBuilder.Append("enum ").Append(EnumName);
+        if (EnumParent is not null) ctxBuilder.Append(" : ").Append(EnumParent);
+        ctxBuilder.Append(" {\n\t");
+
+        var enumValues = new List<string>();
+        foreach (var (k, v) in EnumValues) {
+            var val = new StringBuilder(k);
+            if (v is not null) val.Append(" = ").Append(v);
+            enumValues.Add(val.ToString());
+            
+        }
+
+        ctxBuilder.Append(string.Join(",\n\t", enumValues)).Append('\n');
+        ctxBuilder.Append('}');
+
+        return ctxBuilder.ToString();
     }
 }

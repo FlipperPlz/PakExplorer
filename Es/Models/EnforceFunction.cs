@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Antlr4.Runtime.Misc;
 using PakExplorer.Es.Antlr;
 
@@ -64,4 +65,14 @@ public class EnforceFunction {
         }
     }
 
+
+    public override string ToString() {
+        var ctxBuilder = new StringBuilder();
+        if (FunctionAnnotation is not null) ctxBuilder.Append(FunctionAnnotation).Append('\n');
+        ctxBuilder.Append(string.Join(' ', FunctionModifiers)).Append(' ').Append(FunctionType).Append(' ');
+        if (IsDeconstructor) ctxBuilder.Append('~');
+        ctxBuilder.Append(FunctionName).Append('(').Append(string.Join(", ", FunctionParameters)).Append(") ")
+            .Append(FunctionBody);
+        return ctxBuilder.ToString();
+    }
 }

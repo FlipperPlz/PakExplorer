@@ -6,7 +6,10 @@
 //  * permission of Ryann
 //  *******************************************************/
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Antlr4.Runtime.Misc;
 using PakExplorer.Es.Antlr;
 
@@ -162,4 +165,20 @@ public class EnforceVariable {
 
     }
 
+
+    public override string ToString() {
+        var ctxBuilder = new StringBuilder();
+        if (VariableAnnotation is not null) ctxBuilder.Append(VariableAnnotation).Append('\n');
+        ctxBuilder.Append(string.Join(' ', VariableModifiers)).Append(' ').Append(VariableType).Append(' ');
+
+        var variableBuilder = new List<string>();
+        foreach (var (k, v) in Variables) {
+            var def = k;
+            if (v is not null) def += " = " + v;
+            variableBuilder.Add(def);
+        }
+
+        ctxBuilder.Append(string.Join(", ", variableBuilder));
+        return ctxBuilder.ToString();
+    }
 }

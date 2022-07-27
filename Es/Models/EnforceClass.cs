@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Antlr4.Runtime.Misc;
 using PakExplorer.Es.Antlr;
 
@@ -56,6 +57,25 @@ public class EnforceClass {
             if (globalDeclaration.fieldDeclaration() is { } field) Variables.Add(new EnforceVariable(field));
         }
 
+    }
+
+
+    public override string ToString() {
+        var ctxBuilder = new StringBuilder();
+        if (ClassAnnotation is not null) ctxBuilder.Append(ClassAnnotation).Append('\n');
+        if (ModdedClass) ctxBuilder.Append("modded ");
+        if (SealedClass) ctxBuilder.Append("sealed ");
+        ctxBuilder.Append("class ").Append(ClassName);
+
+        if (ParentClass is not null) ctxBuilder.Append(" : ").Append(ParentClass);
+        ctxBuilder.Append(" {\n");
+        if (Variables.Count != 0) ctxBuilder.Append("//-----------------------------Variables---------------------------------\n");
+        Variables.ForEach(v => ctxBuilder.Append(v).Append(';').Append("\n\n"));
+        if (Functions.Count != 0) ctxBuilder.Append("//-----------------------------Functions---------------------------------\n");
+        Functions.ForEach(f => ctxBuilder.Append(f).Append("\n\n"));
+
+        ctxBuilder.Append('}');
+        return ctxBuilder.ToString();
     }
 }
 
