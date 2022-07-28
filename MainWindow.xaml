@@ -22,7 +22,9 @@
                 <MenuItem Header="_Open file..." Command="Open" InputGestureText="Ctrl+O"  />
                 <!--<MenuItem Header="_Close"/>-->
             </MenuItem>
-            <MenuItem Header="_Extract">
+            <MenuItem Header="_Extract" Name="ExtractMenuItem">
+                <MenuItem Header="_Extract Opened Paks" Click="ExtractAll"  InputGestureText="Ctrl+X"  />
+
             </MenuItem>
             <MenuItem Header="_Options">
                 <MenuItem

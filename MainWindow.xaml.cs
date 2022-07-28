@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Win32;
 using PakExplorer.Es.Models;
 using PakExplorer.Pak;
 using PakExplorer.Tree;
@@ -21,6 +24,10 @@ using PakExplorer.Tree.Files;
 using PakExplorer.Tree.Items;
 using PakExplorer.Tree.Items.Es;
 using PakExplorer.Tree.Items.Es.Child;
+using Cursors = System.Windows.Input.Cursors;
+using MessageBox = System.Windows.MessageBox;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using Path = System.IO.Path;
 
 namespace PakExplorer {
     /// <summary>
@@ -49,6 +56,28 @@ namespace PakExplorer {
             dlg.Multiselect = true;
             if (dlg.ShowDialog() == true) {
                 LoadPAK(dlg.FileName);
+            }
+        }
+        
+        private void ExtractAll(object sender, RoutedEventArgs e) {
+            var dialog = new FolderBrowserDialog();
+            dialog.Description = "Extract To...";
+            dialog.UseDescriptionForTitle = true;
+            dialog.ShowDialog();
+            ExtractAllToFolder(dialog.SelectedPath);
+        }
+
+        private void ExtractAllToFolder(string dialogSelectedPath) {
+            foreach (PakTreeItem pak in PakList) {
+                var currentExtractPath = Path.Combine(dialogSelectedPath,
+                    Path.GetFileNameWithoutExtension(pak.PakFile.FileName));
+                foreach (var entry in pak.PakFile.PakEntries) {
+                    var extractPath = Path.Combine(currentExtractPath, entry.Name);
+                    if (!Directory.Exists(Directory.GetParent(extractPath)?.FullName)) {
+                        Directory.CreateDirectory(Directory.GetParent(extractPath).FullName);
+                    }
+                    File.WriteAllBytesAsync(extractPath, entry.EntryData);
+                }
             }
         }
 
@@ -128,5 +157,7 @@ namespace PakExplorer {
             ScriptsTab.Visibility = Visibility.Hidden;
             ScriptList.Clear();
         }
+
+        
     }
 }
